@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="8" passed="8">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="132204" started-at="2017-10-30T09:19:19Z" finished-at="2017-10-30T09:21:31Z">
+    <groups>
+    </groups>
+    <test name="Default test" duration-ms="132204" started-at="2017-10-30T09:19:19Z" finished-at="2017-10-30T09:21:31Z">
+      <class name="rider.NewTest">
+        <test-method status="PASS" signature="beforeSuite(org.testng.ITestContext)[pri:0, instance:rider.NewTest@2eee9593]" name="beforeSuite" is-config="true" duration-ms="12" started-at="2017-10-30T17:19:19Z" finished-at="2017-10-30T17:19:19Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[org.testng.TestRunner@6631f5ca]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- beforeSuite -->
+        <test-method status="PASS" signature="setUp(java.lang.reflect.Method)[pri:0, instance:rider.NewTest@2eee9593]" name="setUp" is-config="true" duration-ms="5007" started-at="2017-10-30T17:19:19Z" finished-at="2017-10-30T17:19:24Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void rider.NewTest.test_1000_PostState()]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method status="PASS" signature="test_1000_PostState()[pri:0, instance:rider.NewTest@2eee9593]" name="test_1000_PostState" duration-ms="7765" started-at="2017-10-30T17:19:24Z" finished-at="2017-10-30T17:19:32Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- test_1000_PostState -->
+        <test-method status="PASS" signature="tearDown(java.lang.reflect.Method)[pri:0, instance:rider.NewTest@2eee9593]" name="tearDown" is-config="true" duration-ms="914" started-at="2017-10-30T17:19:32Z" finished-at="2017-10-30T17:19:33Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void rider.NewTest.test_1000_PostState()]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method status="PASS" signature="setUp(java.lang.reflect.Method)[pri:0, instance:rider.NewTest@2eee9593]" name="setUp" is-config="true" duration-ms="3745" started-at="2017-10-30T17:19:33Z" finished-at="2017-10-30T17:19:37Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void rider.NewTest.test_1001_CenBianXinxi()]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method status="PASS" signature="test_1001_CenBianXinxi()[pri:0, instance:rider.NewTest@2eee9593]" name="test_1001_CenBianXinxi" duration-ms="7048" started-at="2017-10-30T17:19:37Z" finished-at="2017-10-30T17:19:44Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- test_1001_CenBianXinxi -->
+        <test-method status="PASS" signature="tearDown(java.lang.reflect.Method)[pri:0, instance:rider.NewTest@2eee9593]" name="tearDown" is-config="true" duration-ms="920" started-at="2017-10-30T17:19:44Z" finished-at="2017-10-30T17:19:45Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void rider.NewTest.test_1001_CenBianXinxi()]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method status="PASS" signature="setUp(java.lang.reflect.Method)[pri:0, instance:rider.NewTest@2eee9593]" name="setUp" is-config="true" duration-ms="3853" started-at="2017-10-30T17:19:45Z" finished-at="2017-10-30T17:19:48Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void rider.NewTest.test_1002_ChackText()]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method status="PASS" signature="test_1002_ChackText()[pri:0, instance:rider.NewTest@2eee9593]" name="test_1002_ChackText" duration-ms="5287" started-at="2017-10-30T17:19:48Z" finished-at="2017-10-30T17:19:54Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- test_1002_ChackText -->
+        <test-method status="PASS" signature="tearDown(java.lang.reflect.Method)[pri:0, instance:rider.NewTest@2eee9593]" name="tearDown" is-config="true" duration-ms="1001" started-at="2017-10-30T17:19:54Z" finished-at="2017-10-30T17:19:55Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void rider.NewTest.test_1002_ChackText()]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method status="PASS" signature="setUp(java.lang.reflect.Method)[pri:0, instance:rider.NewTest@2eee9593]" name="setUp" is-config="true" duration-ms="3941" started-at="2017-10-30T17:19:55Z" finished-at="2017-10-30T17:19:59Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void rider.NewTest.test_1100_CheckText()]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method status="PASS" signature="test_1100_CheckText()[pri:0, instance:rider.NewTest@2eee9593]" name="test_1100_CheckText" duration-ms="10629" started-at="2017-10-30T17:19:59Z" finished-at="2017-10-30T17:20:09Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- test_1100_CheckText -->
+        <test-method status="PASS" signature="tearDown(java.lang.reflect.Method)[pri:0, instance:rider.NewTest@2eee9593]" name="tearDown" is-config="true" duration-ms="929" started-at="2017-10-30T17:20:09Z" finished-at="2017-10-30T17:20:10Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void rider.NewTest.test_1100_CheckText()]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method status="PASS" signature="setUp(java.lang.reflect.Method)[pri:0, instance:rider.NewTest@2eee9593]" name="setUp" is-config="true" duration-ms="4386" started-at="2017-10-30T17:20:10Z" finished-at="2017-10-30T17:20:15Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void rider.NewTest.test_1200_CheckText()]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method status="PASS" signature="test_1200_CheckText()[pri:0, instance:rider.NewTest@2eee9593]" name="test_1200_CheckText" duration-ms="19672" started-at="2017-10-30T17:20:15Z" finished-at="2017-10-30T17:20:34Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- test_1200_CheckText -->
+        <test-method status="PASS" signature="tearDown(java.lang.reflect.Method)[pri:0, instance:rider.NewTest@2eee9593]" name="tearDown" is-config="true" duration-ms="1119" started-at="2017-10-30T17:20:34Z" finished-at="2017-10-30T17:20:35Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void rider.NewTest.test_1200_CheckText()]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method status="PASS" signature="setUp(java.lang.reflect.Method)[pri:0, instance:rider.NewTest@2eee9593]" name="setUp" is-config="true" duration-ms="3555" started-at="2017-10-30T17:20:35Z" finished-at="2017-10-30T17:20:39Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void rider.NewTest.test_1200_ClickText()]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method status="PASS" signature="test_1200_ClickText()[pri:0, instance:rider.NewTest@2eee9593]" name="test_1200_ClickText" duration-ms="13697" started-at="2017-10-30T17:20:39Z" finished-at="2017-10-30T17:20:53Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- test_1200_ClickText -->
+        <test-method status="PASS" signature="tearDown(java.lang.reflect.Method)[pri:0, instance:rider.NewTest@2eee9593]" name="tearDown" is-config="true" duration-ms="922" started-at="2017-10-30T17:20:53Z" finished-at="2017-10-30T17:20:54Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void rider.NewTest.test_1200_ClickText()]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method status="PASS" signature="setUp(java.lang.reflect.Method)[pri:0, instance:rider.NewTest@2eee9593]" name="setUp" is-config="true" duration-ms="3673" started-at="2017-10-30T17:20:54Z" finished-at="2017-10-30T17:20:57Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void rider.NewTest.test_1201_CheckText()]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method status="PASS" signature="test_1201_CheckText()[pri:0, instance:rider.NewTest@2eee9593]" name="test_1201_CheckText" duration-ms="14816" started-at="2017-10-30T17:20:57Z" finished-at="2017-10-30T17:21:12Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- test_1201_CheckText -->
+        <test-method status="PASS" signature="tearDown(java.lang.reflect.Method)[pri:0, instance:rider.NewTest@2eee9593]" name="tearDown" is-config="true" duration-ms="1032" started-at="2017-10-30T17:21:12Z" finished-at="2017-10-30T17:21:13Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void rider.NewTest.test_1201_CheckText()]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method status="PASS" signature="setUp(java.lang.reflect.Method)[pri:0, instance:rider.NewTest@2eee9593]" name="setUp" is-config="true" duration-ms="3872" started-at="2017-10-30T17:21:13Z" finished-at="2017-10-30T17:21:17Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void rider.NewTest.test_1300_ClickText()]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method status="PASS" signature="test_1300_ClickText()[pri:0, instance:rider.NewTest@2eee9593]" name="test_1300_ClickText" duration-ms="13319" started-at="2017-10-30T17:21:17Z" finished-at="2017-10-30T17:21:30Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- test_1300_ClickText -->
+        <test-method status="PASS" signature="tearDown(java.lang.reflect.Method)[pri:0, instance:rider.NewTest@2eee9593]" name="tearDown" is-config="true" duration-ms="1080" started-at="2017-10-30T17:21:30Z" finished-at="2017-10-30T17:21:31Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void rider.NewTest.test_1300_ClickText()]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- rider.NewTest -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>
