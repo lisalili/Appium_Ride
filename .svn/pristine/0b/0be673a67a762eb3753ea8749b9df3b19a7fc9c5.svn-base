@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="libs/gson-2.6.2.jar"/>
+	<classpathentry kind="lib" path="libs/java-client-3.4.1.jar"/>
+	<classpathentry kind="lib" path="libs/log4j-api-2.3.jar"/>
+	<classpathentry kind="lib" path="libs/qdox-1.10.jar"/>
+	<classpathentry kind="lib" path="libs/selenium-server-2.53.0-srcs.jar"/>
+	<classpathentry kind="lib" path="libs/selenium-server-2.53.0.jar"/>
+	<classpathentry kind="lib" path="libs/selenium-server-standalone-2.53.0.jar"/>
+	<classpathentry kind="lib" path="libs/testng-6.8.8.jar"/>
+	<classpathentry kind="lib" path="libs/testngext.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

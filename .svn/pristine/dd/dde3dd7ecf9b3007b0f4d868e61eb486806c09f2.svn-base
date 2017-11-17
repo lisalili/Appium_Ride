@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd"> 
+
+
+<suite name="Default suite"> 
+  <test verbose="2" name="Default test"> 
+       
+    <classes> 
+      <class name="appiumDemo.riderstart"> 
+        <methods> 
+          <include name="test_woyaotucao_shbixuan"/> 
+          <include name="test_woyaotucao_xiangqingmiaoshu"/>   
+          <include name="test_woyaotucao_shanghu"/> 
+          <include name="test_woyaotucao_dingdan"/> 
+          <include name="test_woyaotucao_yue"/> 
+          <include name="test_woyaotucao_qita"/> 
+        </methods> 
+      </class> <!-- appiumDemo.riderstart --> 
+    </classes> 
+
+  </test> <!-- Default test --> 
+  
+</suite> <!-- Default suite --> 

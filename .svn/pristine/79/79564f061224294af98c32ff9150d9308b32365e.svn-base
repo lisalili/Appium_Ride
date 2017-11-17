@@ -1,0 +1,24 @@
+package rider.lib;
+
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+
+
+public class CaseConfig {
+//	public static String caseScreenSavePath = "E:\\截图结果\\"+BaseTest.GetCaseName()+"\\";
+	public static String caseScreenSavePath = new File("screenshots").getAbsolutePath()+File.separator;
+	public static String ConsoleLogSavePath = new File("ConsolePrint").getAbsolutePath() +File.separator+"resultPrint.xml";
+	//	public static String ACCOUNT = "15146694513";
+//	public static String PASSWORD = "19900715De";
+//	public static String USER = "de15146694513";
+	
+	public static Boolean HUIGUI = false; 
+	
+	public static String ACCOUNT = "lixin_1";
+	public static String PASSWORD = "Lhw123456";
+	public static String USER = "李鑫";
+	
+}

@@ -1,0 +1,1108 @@
+package rider;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.WebElement;
+
+import org.testng.annotations.Test;
+
+//import com.sun.org.apache.xalan.internal.xsltc.compiler.Pattern;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
+import com.sun.org.apache.xerces.internal.impl.xpath.XPath;
+
+
+import rider.lib.BaseTest;
+import rider.lib.XpathCommon;
+import rider.lib.pswConfig;
+public class riderstart extends BaseTest {
+	
+	
+	//-------------------------------------退出登录---------------------------------------
+	/**
+	 * @Name test_1200_LoginOut
+	 * @Catalogue 系统设置
+	 * @Subcatalog 退出登录
+	 * @Grade P0
+	 * @Describe 点击退出登录，判断是否回到登录页面
+	 * @FunctionPoint 退出登录成功
+	 */
+	@Test
+	public void test_1200_LoginOut() {
+		Goto_UserCenter0();
+		swipeToUp_half(500);
+		WaitForStringShowAndClick("系统设置");
+		WaitForStringShowAndClick("退出当前账号");
+		WaitForViewShowAndClick("ok");
+		WaitForStringShow("登录");     //判断是否回到登陆页面
+		Success();
+	}
+	
+	
+	//------------------------------------我的积分---------------------------------------
+	/**
+	 * @Name test_0100_WoDeJiFen
+	 * @Catalogue 我的积分
+	 * @Subcatalog 当前等级，规则说明，查看明细
+	 * @Grade P0
+	 * @Describe 验证当前等级，规则说明，查看明细
+	 * @FunctionPoint 当前等级是侧栏所显示等级，规则说明入口正常，查看明细入口正常，返回后回到首页
+	 */
+	@Test
+	public void test_0100_WoDeJiFen(){
+		
+		Goto_UserCenter0();
+		String Rider_level=GetStringByid("rider_level");
+//		WaitForViewShowAndClick_Scroll("iv_user_score_arrow");   //2.10之前版本
+		ClickOnText("我的积分");
+		WaitForStringShowInWebView("当前等级");
+//		AssertThat_TextByXpath(XpathCommon.WODEJIFEN_DANGQIANDENGJI, Rider_level);
+		AssertThat_TextByXpathinWebView(XpathCommon.WODEJIFEN_DANGQIANDENGJI, Rider_level);   //判断当前等级是否正确
+		
+		
+		WaitForStringShowAndClick("规则说明");  //点击规则说明
+		
+		WaitForLoadingBearDisappear();
+		if(!CheckStringIsShow("规则说明")){                        //判断规则说明入口是否正确
+			
+			System.err.println("规则说明入口有问题");
+		}
+		ClickOnView("bg");
+		WaitForStringShowInWebView("查看明细 Link");                
+		ClickOnTextInWebView("查看明细 Link"); 
+		if(!CheckViewIsShow("mid")){                               //判断查看明细入口是否正确
+			System.err.println("查看明细入口有问题");
+		}
+		ClickOnView("bg");
+		WaitForViewShow("iv_slip_toggle");
+		Success();
+	}
+	
+	
+
+
+	//------------------------------------在岗状态切换---------------------------------------
+	/**
+	 * @Name test_0000_ZaiGangZhuangTai
+	 * @Catalogue 在岗状态
+	 * @Subcatalog 在岗状态切换
+	 * @Grade P0
+	 * @Describe 每次执行切换一种状态：在岗-》小休    小休-》离岗  离岗-》在岗
+	 * @FunctionPoint 切换后确实变为切换后的状态
+	 */
+	@Test
+	public void test_0000_ZaiGangZhuangTai() {
+		Goto_UserCenter0();
+		if(!CheckTextById("tv_user_type", "众包兼职")){
+
+			if(CheckTextById("tv_work_current_status","在岗")){
+				QieHuanAndBijiao_ZaiGangZhuangTai_Now("小休");
+			}else if(CheckTextById("tv_work_current_status","小休")){
+				QieHuanAndBijiao_ZaiGangZhuangTai_Now("离岗");
+			}else{
+				QieHuanAndBijiao_ZaiGangZhuangTai_Now("在岗");
+			}	
+		}
+		Success();
+		
+		
+	}
+	
+	
+	
+	//------------------------------------收入业绩---------------------------------------
+	/**
+	 * @Name test_0300_ShouRuYeJi
+	 * @Catalogue 收入业绩
+	 * @Subcatalog 业绩概览，收入明细
+	 * @Grade P0
+	 * @Describe 验证业绩概览，收入明细页面
+	 * @FunctionPoint 页面显示为所对应的h5页面，返回后回到首页
+	 */
+	@Test
+	public void test_0300_ShouRuYeJi(){
+		Goto_UserCenter1("收入业绩");
+		WaitForStringShowInWebView("业绩概览");
+		ClickOnTextInWebView("业绩概览");   //h5页点击元素
+		WaitForStringShowInWebView("单量收入");
+		WaitForStringShowInWebView("收入明细");
+		ClickOnTextInWebView("收入明细");
+		WaitForStringShowInWebView("收入业绩");
+		WaitForViewShowAndClick("bg");
+		WaitForViewShow("iv_slip_toggle");
+		Success();
+	}
+	
+	
+	
+	
+	//------------------------绩效考核页面数据展示---------------------------------------
+	/**
+	 * @Name test_0400_JiXiaoKaoHe_ShuJuQingQiu
+	 * @Catalogue 绩效考核
+	 * @Subcatalog 绩效考核数据请求
+	 * @Grade P0
+	 * @Describe 验证绩效考核显示，如果违规次数》=1，则判断是否可正常跳转到对应日期的历史订单页面
+	 * @FunctionPoint 页面显示正常，违规次数》=1时正常跳转到历史订单页面
+	 */
+	@Test
+	public void test_0400_JiXiaoKaoHe_ShuJuQingQiu(){
+		Goto_UserCenter1("绩效考核");
+		WaitForViewShow("tv_current_data");
+		AssertThat_TextByXpath(XpathCommon.JIXIAOKAOHE_KAOHEZHIBIAO_ZHUNSHILV,"95" );
+		AssertThat_TextByXpath(XpathCommon.JIXIAOKAOHE_KAOHEZHIBIAO_PINGJUNSONGDA,"40" );
+		
+		if(!CheckStringIsShow("准时率","平均送达","完成单量","顾客差评","顾客差评")){
+			System.err.println("没有获取到/logistics/rider/getknightkpidata接口的数据（日）");
+			failAndsrceen("test_0400_JiXiaoKaoHe_未获取数据");
+		}
+		
+		
+		if(getWeiGuiCiShu()){
+			String dateNowString=GetStringByid("tv_current_data");
+			String dateNowString_format = dateNowString.replace("月","-");
+			WaitForViewShowAndClick("tv_query_illegal_order");
+			Sleep(1000);   //后期看具体加载方案改动
+			WaitForStringShow("历史订单");
+			AssertThat_TextById("text",dateNowString_format.substring(0,dateNowString_format.length()-1));
+		}
+		
+		
+		
+		ClickOnView("rb_select_by_month");
+		WaitForLoadingBearDisappear();
+		ClickOnView("tv_current_data");
+		Sleep(500);
+//		ClickOnText("27");
+		swipeToUp_half(500);
+		ClickOnView("ok");
+		if(!CheckStringIsShow("准时率","平均送达","完成单量","顾客差评","顾客差评")){
+			System.err.println("没有获取到/logistics/rider/getknightkpidata接口的数据（月）");
+			failAndsrceen("test_0400_JiXiaoKaoHe_未获取数据");
+		}
+
+		
+		Success();
+		
+
+	}
+	
+	//---------------------------绩效考核按日期时间查看---------------------------------------
+	/**
+	 * @Name test_0401_JiXiaoKaoHe_RiQi
+	 * @Catalogue 绩效考核
+	 * @Subcatalog 绩效考核按日期查看
+	 * @Grade P0
+	 * @Describe 验证绩效考核上一个月1号的信息显示，如果违规次数》=1，则判断是否不能跳转到对应日期的历史订单页面
+	 * @FunctionPoint 页面显示正常，违规次数》=1时不能跳转到历史订单页面（因为超过了30天）
+	 */
+		@Test
+		public void test_0401_JiXiaoKaoHe_RiQi(){
+			Goto_UserCenter1("绩效考核");
+			WaitForViewShowAndClick("tv_current_data");
+			WaitForViewShowAndClick("calendar_title_left_tv");
+			WaitForStringShowAndClick("1");
+			if(!CheckStringIsShow("准时率","平均送达","完成单量","顾客差评","顾客差评")){
+				System.err.println("没有获取到/logistics/rider/getknightkpidata接口的数据（日）");
+				failAndsrceen("test_0400_JiXiaoKaoHe_未获取数据");
+			}
+			
+			if(getWeiGuiCiShu()){
+				
+				WaitForViewShowAndClick("tv_query_illegal_order");
+				Sleep(1000);   //后期看具体加载方案改动
+				if(CheckStringIsShow("历史订单")){
+					System.err.println("30天之前的违规历史订单不应该跳转成功");
+					failAndsrceen("test_0401_JiXiaoKaoHe_RiQi违规历史订单跳转");
+				}
+			}
+			
+			ClickOnView("bg");
+			WaitForViewShow("iv_slip_toggle");
+			Success();
+		}
+		
+		
+	
+	
+	//---------------------------绩效考核按月份查看---------------------------------------
+		/**
+		 * @Name test_0402_JiXiaoKaoHe_YueFen
+		 * @Catalogue 绩效考核
+		 * @Subcatalog 绩效考核按月份查看
+		 * @Grade P0
+		 * @Describe 验证绩效考核上两月的数据
+		 * @FunctionPoint 页面数据显示正常，返回后回到首页
+		 */
+		@Test
+		public void test_0402_JiXiaoKaoHe_YueFen(){
+			Goto_UserCenter1("绩效考核");
+			WaitForViewShowAndClick("rb_select_by_month");
+			XuanZe_HuaDongKongJian_last("tv_current_data");
+			if(!CheckStringIsShow("准时率","平均送达","完成单量","顾客差评","顾客差评")){
+				System.err.println("没有获取到/logistics/rider/getknightkpidata接口的数据（月）");
+				failAndsrceen("test_0400_JiXiaoKaoHe_未获取数据");
+			}
+			
+			
+			GoBack_Physical();
+			WaitForViewShow("iv_slip_toggle");
+			Success();
+		}
+		
+	
+		
+		//---------------------------绩效考核查看数据英雄榜——准时率tab---------------------------------------
+		/**
+		 * @Name test_0403_JiXiaoKaoHe_YXB_ZhunShiLv
+		 * @Catalogue 绩效考核查看数据英雄榜
+		 * @Subcatalog 绩效考核查看数据英雄榜准时率tab
+		 * @Grade P0
+		 * @Describe 验证数据英雄榜准时率tab下页面展示，切换月份后数据展示，返回到绩效考核页面
+		 * @FunctionPoint 页面数据显示正常，为空页面或者有数据页面，正确展示“我”的位置，当前人物姓名，第X名，%，还有排名卡片的排名
+	     */
+		@Test
+		public void test_0403_JiXiaoKaoHe_YXB_ZhunShiLv(){
+			Goto_UserCenter0();
+			String Real_Name=GetStringByid("tv_user_real_name");
+//					WaitForViewShowAndClick_Scroll("iv_user_score_arrow");   //2.10之前版本
+			ClickOnText("绩效考核");
+			WaitForViewShowAndClick("tv_checkherolist");
+			WaitForStringShow("英雄榜","准时率","平均送达","完成单量","配送距离");
+			Check_YingXiongBang_YeMianYuanSu(Real_Name,"准时率","%","test_0403_JiXiaoKaoHe_YXB_ZhunShiLv准时率tab");
+			XuanZe_HuaDongKongJian_last("tv_herolist_date");
+			Check_YingXiongBang_YeMianYuanSu(Real_Name,"准时率","%","test_0403_JiXiaoKaoHe_YXB_ZhunShiLv准时率tab");					
+			GoBack_Physical();
+			WaitForStringShow("绩效考核");
+
+			Success();
+		}
+				
+		//---------------------------绩效考核查看数据英雄榜——平均送达tab---------------------------------------
+		/**
+		 * @Name test_0404_JiXiaoKaoHe_YXB_PingJunSongDa
+		 * @Catalogue 绩效考核查看数据英雄榜
+		 * @Subcatalog 绩效考核查看数据英雄榜平均送达tab
+		 * @Grade P0
+		 * @Describe 验证数据英雄榜平均送达tab下页面展示，切换月份后数据展示，返回到绩效考核页面
+		 * @FunctionPoint 页面数据显示正常，为空页面或者有数据页面，正确展示“我”的位置，当前人物姓名，第X名，分钟，还有排名卡片的排名
+	     */
+		@Test
+		public void test_0404_JiXiaoKaoHe_YXB_PingJunSongDa(){
+			Goto_UserCenter0();
+			String Real_Name=GetStringByid("tv_user_real_name");
+//					WaitForViewShowAndClick_Scroll("iv_user_score_arrow");   //2.10之前版本
+			ClickOnText("绩效考核");
+			WaitForViewShowAndClick("tv_checkherolist");
+			WaitForStringShow("英雄榜","准时率","平均送达","完成单量","配送距离");
+			ClickOnText("平均送达");
+			Check_YingXiongBang_YeMianYuanSu(Real_Name,"平均送达","分钟","test_0404_JiXiaoKaoHe_YXB_PingJunSongDa平均送达tab");
+			XuanZe_HuaDongKongJian_last("tv_herolist_date");
+			Check_YingXiongBang_YeMianYuanSu(Real_Name,"平均送达","分钟","test_0404_JiXiaoKaoHe_YXB_PingJunSongDa平均送达tab");					
+			GoBack_Physical();
+			WaitForStringShow("绩效考核");
+
+			Success();
+		}
+		
+		
+		//---------------------------绩效考核查看数据英雄榜——完成单量tab---------------------------------------
+		/**
+		 * @Name test_0405_JiXiaoKaoHe_YXB_WanChengDanLiang
+		 * @Catalogue 绩效考核查看数据英雄榜
+		 * @Subcatalog 绩效考核查看数据英雄榜完成单量tab
+		 * @Grade P0
+		 * @Describe 验证数据英雄榜完成单量tab下页面展示，切换月份后数据展示，返回到绩效考核页面
+		 * @FunctionPoint 页面数据显示正常，为空页面或者有数据页面，正确展示“我”的位置，当前人物姓名，第X名，单，是否显示单均骑行距离，还有排名卡片的排名
+	     */
+		@Test
+		public void test_0405_JiXiaoKaoHe_YXB_WanChengDanLiang(){
+			Goto_UserCenter0();
+			String Real_Name=GetStringByid("tv_user_real_name");
+//					WaitForViewShowAndClick_Scroll("iv_user_score_arrow");   //2.10之前版本
+			ClickOnText("绩效考核");
+			WaitForViewShowAndClick("tv_checkherolist");
+			WaitForStringShow("英雄榜","准时率","平均送达","完成单量","配送距离");
+			ClickOnText("完成单量");
+			Check_YingXiongBang_YeMianYuanSu(Real_Name,"完成单量","单","test_0405_JiXiaoKaoHe_YXB_WanChengDanLiang完成单量tab");
+			XuanZe_HuaDongKongJian_last("tv_herolist_date");
+			Check_YingXiongBang_YeMianYuanSu(Real_Name,"完成单量","单","test_0405_JiXiaoKaoHe_YXB_WanChengDanLiang完成单量tab");					
+			
+			GoBack_Physical();
+			WaitForStringShow("绩效考核");
+
+			Success();
+		}
+
+		
+		//---------------------------绩效考核查看数据英雄榜——配送距离tab---------------------------------------
+		/**
+		 * @Name test_0406_JiXiaoKaoHe_YXB_PeiSongJuLi
+		 * @Catalogue 绩效考核查看数据英雄榜
+		 * @Subcatalog 绩效考核查看数据英雄榜配送距离tab
+		 * @Grade P0
+		 * @Describe 验证数据英雄榜配送距离tab下页面展示，切换月份后数据展示，返回到绩效考核页面
+		 * @FunctionPoint 页面数据显示正常，为空页面或者有数据页面，正确展示“我”的位置，当前人物姓名，第X名，公里，还有排名卡片的排名
+	     */
+		@Test
+		public void test_0406_JiXiaoKaoHe_YXB_PeiSongJuLi(){
+			Goto_UserCenter0();
+			String Real_Name=GetStringByid("tv_user_real_name");
+//					WaitForViewShowAndClick_Scroll("iv_user_score_arrow");   //2.10之前版本
+			ClickOnText("绩效考核");
+			WaitForViewShowAndClick("tv_checkherolist");
+			WaitForStringShow("英雄榜","准时率","平均送达","完成单量","配送距离");
+			ClickOnText("配送距离");
+			Check_YingXiongBang_YeMianYuanSu(Real_Name,"配送距离","公里","test_0406_JiXiaoKaoHe_YXB_PeiSongJuLi配送距离tab");
+			XuanZe_HuaDongKongJian_last("tv_herolist_date");
+			Check_YingXiongBang_YeMianYuanSu(Real_Name,"配送距离","公里","test_0406_JiXiaoKaoHe_YXB_PeiSongJuLi配送距离tab");					
+			
+			GoBack_Physical();
+			WaitForStringShow("绩效考核");
+
+			Success();
+		}
+	//--------------------------------吐槽供应商---------------------------------------
+		/**
+		 * @Name test_0511_TouSuGongYingShang
+		 * @Catalogue 吐槽投诉-投诉供应商
+		 * @Subcatalog 投诉供应商
+		 * @Grade P0
+		 * @Describe 投诉供应商工资发放，任意时间下提交，判断未回复列表是否正确
+		 * @FunctionPoint 正常提交，未回复列表正常
+	     */
+		@Test
+		public void test_0511_TouSuGongYingShang() {
+			Goto_UserCenter1("吐槽投诉");
+			XuanZe_HuaDongKongJian("tv_type");
+			XuanZe_HuaDongKongJian("tv_visit_time"); 
+			ClickOnView("et_phone");
+			driver.getKeyboard().sendKeys("13601023270"); 
+			ClickOnView("et_desc");
+			driver.getKeyboard().sendKeys("刘宏伟测试投诉供应商"); 
+			ClickOnView("tv_complain_submit");
+			WaitForLoadingBearDisappear();
+			AssertThat_TextById("tv_type_content", "任意时间");
+			AssertThat_TextById("tv_fback_time",GetNowDate());
+			AssertThat_TextById("tv_visit_phone_content","13601023270");
+			AssertThat_TextById("tv_desc_content","刘宏伟测试投诉供应商");
+			Success();
+		}
+	
+		//--------------------------------吐槽供应商——号码位数&不同类型---------------------------------------
+		/**
+		 * @Name test_0513_TouSuGongYingShang_XiangQingMiaoShu
+		 * @Catalogue 吐槽投诉-投诉供应商
+		 * @Subcatalog 投诉供应商号码位数&不同类型
+		 * @Grade P0
+		 * @Describe 判断电话号码的位数限制和不同类型选择
+		 * @FunctionPoint 位数限定11位，不同类型正常提交，未回复列表正常
+	     */
+		@Test
+		public void test_0514_TouSuGongYingShang_HaoMaWeiShu() {
+			Goto_UserCenter1("吐槽投诉");
+			XuanZe_HuaDongKongJian_last("tv_type");
+			XuanZe_HuaDongKongJian_last("tv_visit_time"); 
+			ClickOnView("et_phone");
+			driver.getKeyboard().sendKeys("1360102327"); 
+			ClickOnView("et_desc");
+			driver.getKeyboard().sendKeys("刘宏伟测试投诉供应商"); 
+			ClickOnView("tv_complain_submit");
+			if(CheckViewIsShow("img")){
+				System.out.println("对联系电话没有进行位数限制");
+			}
+			ClickOnView("et_phone");
+			deleteEditText();
+			driver.getKeyboard().sendKeys("13601023270"); 
+			ClickOnView("tv_complain_submit");
+			WaitForLoadingBearDisappear();
+			AssertThat_TextById("tv_type_content", "18:00-20:00");
+			AssertThat_TextById("tv_fback_time",GetNowDate());
+			AssertThat_TextById("tv_visit_phone_content","13601023270");
+			AssertThat_TextById("tv_desc_content","刘宏伟测试投诉供应商");
+			Success();
+		}
+		//--------------------------------吐槽供应商——必选项---------------------------------------
+		/**
+		 * @Name test_0512_TouSuGongYingShang_BiXuan
+		 * @Catalogue 吐槽投诉-投诉供应商
+		 * @Subcatalog 投诉供应商必选项
+		 * @Grade P0
+		 * @Describe 验证是否所有必选项都进行校验
+		 * @FunctionPoint 校验了所有必选项
+	     */
+		@Test
+		public void test_0512_TouSuGongYingShang_BiXuan() {
+			Goto_UserCenter1("吐槽投诉");
+			ClickOnView("tv_complain_submit");   //所有必填项
+			if(CheckViewIsShow("img")){
+				System.out.println("对所有必填项都没有进行校验");
+			}
+			////////////////////////////
+			ClickOnView("et_desc");
+			driver.getKeyboard().sendKeys("刘宏伟测试投诉供应商");   //填写详情描述
+			ClickOnView("tv_complain_submit");   //所有必填项
+			if(CheckViewIsShow("img")){
+				System.out.println("对投诉类型类型必填项没有进行校验");
+			}
+			
+			/////////////////////////////
+			XuanZe_HuaDongKongJian("tv_type");
+			
+			ClickOnView("tv_complain_submit");   
+			if(CheckViewIsShow("img")){
+				System.out.println("对联系电话必填项没有进行校验");
+			}
+			///////////////////////////
+			ClickOnView("et_phone");
+			driver.getKeyboard().sendKeys("13601023270"); 
+			/////////////////////////////
+			
+			
+			ClickOnView("et_desc");
+			deleteEditText();
+			ClickOnView("tv_complain_submit");   //所有必填项
+			if(CheckViewIsShow("img")){
+				System.out.println("对详细描述必填项没有进行校验");
+			}
+			////////////////
+			ClickOnView("et_desc");
+			driver.getKeyboard().sendKeys("刘宏伟测试投诉供应商"); 
+			ClickOnView("tv_complain_submit");   
+			
+			Success();
+		}
+		
+		//--------------------------------吐槽供应商——详情描述---------------------------------------
+			/**
+			 * @Name test_0513_TouSuGongYingShang_XiangQingMiaoShu
+			 * @Catalogue 吐槽投诉-投诉供应商
+			 * @Subcatalog 投诉供应商详情描述
+			 * @Grade P0
+			 * @Describe 判断详情描述提示必填文案以及200字限制
+			 * @FunctionPoint 必填文案以及200字限制功能正常，返回后跳转到上一级再返回到首页
+		     */
+		@Test
+		public void test_0513_TouSuGongYingShang_XiangQingMiaoShu() {
+			Goto_UserCenter1("吐槽投诉");
+			XuanZe_HuaDongKongJian("tv_type");
+//			XuanZe_HuaDongKongJian("tv_visit_time"); 
+			ClickOnView("et_phone");
+			driver.getKeyboard().sendKeys("13601023270"); 
+			AssertThat_TextById("et_desc", "必填，请填写最多200字");
+			ClickOnView("et_desc");
+			driver.getKeyboard().sendKeys("123");   //填写详情描述
+			deleteEditText();
+			AssertThat_TextById("et_desc", "必填，请填写最多200字");
+			ClickOnView("et_desc");
+			driver.getKeyboard().sendKeys("001234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789");   //填写详情描述
+			//et_desc
+			if(!CheckStringIsShow("00123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678")){
+				System.out.println("没有对详情描述进行300字的字数限制进行校验");
+			}
+			ClickOnView("tv_complain_submit");   //所有必填项
+			WaitForLoadingBearDisappear();
+			ClickOnView("ll_back");
+			WaitForStringShow("投诉供应商");
+			ClickOnView("ll_back");
+			WaitForViewShow("iv_slip_toggle");
+			Success();
+		}
+		
+	//--------------------------------我要吐槽——商户---------------------------------------
+	/**
+	 * @Name test_0500_WoYaoTuCao_ShangHu
+	 * @Catalogue 吐槽投诉-我要吐槽
+	 * @Subcatalog 我要吐槽商户
+	 * @Grade P0
+	 * @Describe 选择商户类型吐槽，判断提交后未回复列表是否正常
+	 * @FunctionPoint 正常提交，未回复列表显示正常
+     */
+	@Test
+	public void test_0500_WoYaoTuCao_ShangHu() {
+		Goto_UserCenter2("吐槽投诉","我要吐槽");
+		WaitForViewShowAndClick("tv_level1_content"); //点击 吐槽类型的下拉框
+		WaitForStringShowAndClick("商户");
+		WaitForViewShowAndClick("tv_level2_content");
+		
+		
+		WaitForViewShowAndClick("tv_shop_name");               
+		String tempString= GetStringByid("tv_level2_content");
+
+		ClickOnText("出餐慢");
+		ClickOnText("不打折");
+		ClickOnView("et_desc");
+		driver.getKeyboard().sendKeys("吐槽投诉-商户-自动化测试测试刘宏伟~~");   //填写详情描述
+		//et_desc
+		ClickOnView("tv_feedback_submit");
+		WaitForLoadingBearDisappear();
+		AssertThat_TextById("tv_type_content","商户");
+		AssertThat_TextById("tv_fback_time",GetNowDate());
+		AssertThat_TextById("tv_name_content",tempString);
+		AssertThat_TextById("tv_questions_content","出餐慢，不打折");
+		AssertThat_TextById("tv_desc_content","吐槽投诉-商户-自动化测试测试刘宏伟~~");
+		Success();
+		
+	}
+	
+	//--------------------------------我要吐槽——订单---------------------------------------
+		/**
+		 * @Name test_0501_WoYaoTuCao_DingDan
+		 * @Catalogue 吐槽投诉-我要吐槽
+		 * @Subcatalog 我要吐槽订单
+		 * @Grade P0
+		 * @Describe 选择订单类型吐槽，判断提交后未回复列表是否正常
+		 * @FunctionPoint 正常提交，未回复列表显示正常
+	     */
+	@Test
+	public void test_0501_WoYaoTuCao_DingDan() {
+		Goto_UserCenter2("吐槽投诉","我要吐槽");
+		WaitForViewShowAndClick("tv_level1_content"); //点击 吐槽类型的下拉框
+		WaitForStringShowAndClick("订单");
+		WaitForViewShowAndClick("tv_level2_content");
+		
+		WaitForViewShowAndClick("tv_shop_name");               
+		String tempString= GetStringByid("tv_level2_content");
+		
+		ClickOnText("订单距离过远");
+		ClickOnText("订单积压过多");
+		ClickOnText("订单积压过多");
+		ClickOnView("et_desc");
+		driver.getKeyboard().sendKeys("吐槽投诉-订单-自动化测试测试刘宏伟~~");   //填写详情描述
+		//et_desc
+		ClickOnView("tv_feedback_submit");
+		WaitForLoadingBearDisappear();
+		AssertThat_TextById("tv_type_content","订单");
+		AssertThat_TextById("tv_fback_time",GetNowDate());
+		AssertThat_TextById("tv_name_content",tempString);
+		AssertThat_TextById("tv_questions_content","订单距离过远");
+		AssertThat_TextById("tv_desc_content","吐槽投诉-订单-自动化测试测试刘宏伟~~");
+		Success();
+	}
+	
+	//--------------------------------我要吐槽——余额---------------------------------------
+	/**
+	 * @Name test_0502_WoYaoTuCao_YuE
+	 * @Catalogue 吐槽投诉-我要吐槽
+	 * @Subcatalog 我要吐槽余额
+	 * @Grade P0
+	 * @Describe 选择余额类型吐槽，判断提交后未回复列表是否正常
+	 * @FunctionPoint 正常提交，未回复列表显示正常
+     */
+	@Test
+	public void test_0502_WoYaoTuCao_YuE() {
+		Goto_UserCenter2("吐槽投诉","我要吐槽");
+		WaitForViewShowAndClick("tv_level1_content"); //点击 吐槽类型的下拉框
+		WaitForStringShowAndClick("余额");
+		Sleep(1000);
+		ClickOnText("绑卡失败");
+		ClickOnText("收入金额不对");
+		ClickOnText("提现未到账");
+		ClickOnView("et_desc");
+		driver.getKeyboard().sendKeys("吐槽投诉-余额-自动化测试测试刘宏伟~~");   //填写详情描述
+		//et_desc
+		ClickOnView("tv_feedback_submit");
+		WaitForLoadingBearDisappear();
+		AssertThat_TextById("tv_type_content","余额");
+		AssertThat_TextById("tv_fback_time",GetNowDate());
+		AssertThat_TextById("tv_questions_content","绑卡失败，收入金额不对，提现未到账");
+		AssertThat_TextById("tv_desc_content","吐槽投诉-余额-自动化测试测试刘宏伟~~");
+		Success();
+	}
+	
+	//--------------------------------我要吐槽——其他---------------------------------------
+	/**
+	 * @Name test_0503_WoYaoTuCao_QiTa
+	 * @Catalogue 吐槽投诉-我要吐槽
+	 * @Subcatalog 我要吐槽其他
+	 * @Grade P0
+	 * @Describe 选择其他类型吐槽，判断提交后未回复列表是否正常
+	 * @FunctionPoint 正常提交，未回复列表显示正常
+     */
+	@Test
+	public void test_0503_WoYaoTuCao_QiTa() {
+		Goto_UserCenter2("吐槽投诉","我要吐槽");
+		WaitForViewShowAndClick("tv_level1_content"); //点击 吐槽类型的下拉框
+		WaitForStringShowAndClick("其他");
+		Sleep(1000);
+		
+		ClickOnText("投诉其他骑士");
+		ClickOnText("小度骑士故障");
+		ClickOnView("et_desc");
+		driver.getKeyboard().sendKeys("吐槽投诉-其他-自动化测试测试刘宏伟~~");   //填写详情描述
+		//et_desc
+		ClickOnView("tv_feedback_submit");
+		WaitForLoadingBearDisappear();
+		//WaitForViewShow("未回复");
+		AssertThat_TextById("tv_type_content","其他");
+		AssertThat_TextById("tv_fback_time",GetNowDate());
+		AssertThat_TextById("tv_questions_content","投诉其他骑士，小度骑士故障");
+		AssertThat_TextById("tv_desc_content","吐槽投诉-其他-自动化测试测试刘宏伟~~");
+		Success();
+	}
+	
+	//--------------------------------我要吐槽——必选项---------------------------------------
+	/**
+	 * @Name test_0504_WoYaoTuCao_ShangHu_BiXuan
+	 * @Catalogue 吐槽投诉-我要吐槽
+	 * @Subcatalog 我要吐槽必选项
+	 * @Grade P0
+	 * @Describe 选择商户类型吐槽，判断必选项
+	 * @FunctionPoint 所有必选项全部验证，必选项都填后可正常提交
+     */
+	@Test
+	public void test_0504_WoYaoTuCao_ShangHu_BiXuan() {
+		Goto_UserCenter2("吐槽投诉","我要吐槽");
+		ClickOnView("tv_feedback_submit");   //所有必填项
+		if(CheckViewIsShow("img")){
+			System.out.println("对所有必填项都没有进行校验");
+		}
+		////////////////////////////
+		ClickOnView("et_desc");
+		driver.getKeyboard().sendKeys("吐槽投诉-商户-自动化测试测试刘宏伟~~");   //填写详情描述
+		ClickOnView("tv_feedback_submit");   //所有必填项
+		if(CheckViewIsShow("img")){
+			System.out.println("对吐槽类型必填项没有进行校验");
+		}
+		
+		/////////////////////////////
+		WaitForViewShowAndClick("tv_level1_content"); //点击 吐槽类型的下拉框
+		WaitForStringShowAndClick("商户");
+		Sleep(1000);
+		ClickOnText("出餐慢");
+		ClickOnText("不打折");
+		
+		ClickOnView("tv_feedback_submit");   
+		if(CheckViewIsShow("img")){
+			System.out.println("对选择商户必填项没有进行校验");
+		}
+		///////////////////////////
+		WaitForViewShowAndClick("tv_level2_content");
+		WaitForViewShowAndClick("tv_shop_name");               
+		Sleep(1000);
+		ClickOnText("出餐慢");
+		ClickOnText("不打折");
+		ClickOnView("tv_feedback_submit");   //所有必填项
+		if(CheckViewIsShow("img")){
+			System.out.println("对具体问题必填项没有进行校验");
+		}
+		/////////////////////////////
+		
+		ClickOnText("出餐慢");
+		ClickOnText("不打折");
+		ClickOnView("et_desc");
+		deleteEditText();
+		ClickOnView("tv_feedback_submit");   //所有必填项
+		if(CheckViewIsShow("img")){
+			System.out.println("对详细描述必填项没有进行校验");
+		}
+		////////////////
+		ClickOnView("et_desc");
+		driver.getKeyboard().sendKeys("吐槽投诉-商户-自动化测试测试刘宏伟~~"); 
+		ClickOnView("tv_feedback_submit");   
+		WaitForLoadingBearDisappear();
+		
+		Success();
+	}
+	//--------------------------------我要吐槽——详情描述---------------------------------------
+	/**
+	 * @Name test_0505_WoYaoTuCao_XiangQingMiaoShu
+	 * @Catalogue 吐槽投诉-我要吐槽
+	 * @Subcatalog 我要吐槽详情描述
+	 * @Grade P0
+	 * @Describe 选择其他类型吐槽，判断详情描述提示必填文案以及300字限制
+	 * @FunctionPoint 必填文案以及300字限制功能正常，返回后跳转到上一级再返回到首页
+     */
+	@Test
+	public void test_0505_WoYaoTuCao_XiangQingMiaoShu() {
+		Goto_UserCenter2("吐槽投诉","我要吐槽");
+		WaitForViewShowAndClick("tv_level1_content"); //点击 吐槽类型的下拉框
+		WaitForStringShowAndClick("其他");
+		
+		Sleep(1000);
+		
+		ClickOnText("投诉其他骑士");
+		ClickOnView("et_desc");
+		if(!CheckTextById("et_desc", "必填，请填写最多300字。如您提供的信息对我们帮助很大，会给予您一定的奖励。")){
+			System.err.println("我要吐槽——详情描述没有提示必填文案");
+		}
+		driver.getKeyboard().sendKeys("123");   //填写详情描述
+		ClickOnView("et_desc");
+		deleteEditText();
+		if(!CheckTextById("et_desc", "必填，请填写最多300字。如您提供的信息对我们帮助很大，会给予您一定的奖励。")){
+			System.err.println("我要吐槽——详情描述输入文字再全部删除后没有提示必填文案");
+		}
+		ClickOnView("et_desc");
+		driver.getKeyboard().sendKeys("0012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789");   //填写详情描述
+		//et_desc
+		if(!CheckStringIsShow("001234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678")){
+			System.out.println("没有对详情描述进行300字的字数限制进行校验");
+		}
+		ClickOnView("tv_feedback_submit");   //所有必填项
+		WaitForLoadingBearDisappear();
+		ClickOnView("ll_back");
+		WaitForStringShow("投诉供应商");
+		ClickOnView("ll_back");
+		WaitForViewShow("iv_slip_toggle");
+		Success();
+	}
+	
+	
+	
+	
+	//-------------------------------------我的余额，修改提现密码---------------------------------------
+	/**
+	 * @Name test_0600_WoDeYuE_XiuGai_TiXianPsw
+	 * @Catalogue 我的余额
+	 * @Subcatalog 修改提现密码
+	 * @Grade P0
+	 * @Describe   
+					// 1、对原密码进行校验
+					// 2、输入与原密码相同的密码
+					// 3、输入生日：198510  /  851011
+					// 4、输入6位连续数字：111111   /123456
+					// 5、输入两次不同的密码
+					// 6、输入符合规则的新密码
+					// 7、再次确认修改是否成功，改回原密码
+	 * @FunctionPoint 所有逻辑正确，修改成功，改回原密码，逐层返回，最后返回到首页
+     */
+	@Test
+	
+	public void test_0600_WoDeYuE_XiuGai_TiXianPsw(){
+		Goto_UserCenter2("我的余额","设置");	
+		WaitForViewShowAndClick("tv_set_cash_pwd"); //点击修改提现密码	     	
+		AssertThat_DialogIsShow();   
+		txpsw(pswConfig.PASSWORD2);          //输入错误密码，对原密码进行校验
+		if(!CheckStringIsShow("重新输入")){		
+			System.err.println("修改提现密码---未对原提现密码进行校验！！！");
+			return ;
+		}
+		ClickOnText("重新输入");	
+		
+		AssertThat_DialogIsShow();  
+		txpsw(pswConfig.PASSWORD1);
+		
+		Juge_TiXianMiMa_isRight(pswConfig.PASSWORD1,pswConfig.PASSWORD1,"设置提现密码","修改提现密码---未限制密码与原密码不能相同！！！");
+		
+		Juge_TiXianMiMa_isRight("198510","198510","设置提现密码","修改提现密码---未限制密码不能为生日！！！");
+		
+		Juge_TiXianMiMa_isRight("851011","851011","设置提现密码","修改提现密码---未限制密码不能为生日！！！");
+		
+		Juge_TiXianMiMa_isRight("123456","123456","设置提现密码","修改提现密码---未限制密码不能为6位连续数字！！！");
+		
+		Juge_TiXianMiMa_isRight("111111","111111","设置提现密码","修改提现密码---未限制密码不能为6位重复数字！！！");
+		
+		Juge_TiXianMiMa_isRight(pswConfig.PASSWORD2,"789124","再次输入密码","修改提现密码---未判断两次密码是否输入数字相同！！！");
+		
+		
+		
+		AssertThat_DialogIsShow();  
+		txpsw(pswConfig.PASSWORD2);   //et_password
+		
+		
+		//验证修改密码后是否成功，并且将密码置为原123789
+		WaitForViewShowAndClick("tv_set_cash_pwd"); //点击修改提现密码
+		
+		AssertThat_DialogIsShow();   //判断对话框是否弹出  ll_loading
+		
+		txpsw(pswConfig.PASSWORD2);
+		
+		if(CheckStringIsShow("重新输入")){
+			System.err.println("修改提现密码未成功！！！");
+		}else{
+			AssertThat_DialogIsShow();  
+			txpsw(pswConfig.PASSWORD1);
+			AssertThat_DialogIsShow();  
+			txpsw(pswConfig.PASSWORD1);
+		}
+		GoBack_Physical();
+		WaitForStringShow("提现");
+		GoBack_Physical();
+		WaitForViewShow("iv_slip_toggle");
+		Success();
+		}
+	
+	
+	//-------------------------------------我的余额，提现---------------------------------------
+	/**
+	 * @Name test_0601_WoDeYuE_TiXian
+	 * @Catalogue 我的余额
+	 * @Subcatalog 提现
+	 * @Grade P0
+	 * @Describe   验证提现，可提现余额变化，提现次数减少，账单
+	 * @FunctionPoint 提现正常，提现密码正常校验，余额变化正常，次数减少正确，账单正确
+     */
+		@Test
+		public void test_0601_WoDeYuE_TiXian(){
+			Goto_UserCenter1("我的余额");
+			String Before_BanlanceString =GetStringByid("tv_balance");  //存储当前可提现余额
+			ClickOnText("提现");   //et_balance
+			
+			String num1 = get_Now_TiXianCiShu();   //用了正则表达式取出数字
+			System.out.println(num1);
+			Input_TiXianJinE_TiJiao("0.01");
+			
+			if(num1.equals("0")){
+				if(!CheckStringIsShow("申请提现")){
+					System.err.println("可提现次数为0时，仍可点击提交按钮");
+				}
+				Success();
+				return;
+			}
+			
+			/////////////////////////////////////////
+			
+			txpsw(pswConfig.PASSWORD2);          //输入错误密码，对原密码进行校验
+			if(!CheckStringIsShow("重新输入")){		
+				System.err.println("修改提现密码---未对原提现密码进行校验！！！");
+				return ;
+			}
+			ClickOnText("重新输入");	
+			AssertThat_DialogIsShow();  
+			txpsw("123789");
+			WaitForLoadingBearDisappear();
+			WaitForViewShowAndClick("ok");		
+			String After_BanlanceString =GetStringByid("tv_balance"); //获取提现后的可提现余额
+			
+			BigDecimal Before_BanlanceString1 = new BigDecimal(Before_BanlanceString);
+		    BigDecimal After_BanlanceString1 = new BigDecimal(After_BanlanceString);
+		    float ChaZhi = Before_BanlanceString1.subtract(After_BanlanceString1).floatValue(); 
+			
+			
+		    if ( Math.abs(ChaZhi-0.01) >=1e-7 ){      //浮点数的比较，不要直接用ChaZhi!=0.01
+		    	System.err.println("实际提现金额与操作不符2");
+		    }
+		    
+		    ClickOnText("提现");
+		    
+		    String num2 = get_Now_TiXianCiShu();
+			int Num1=Integer.parseInt(num1);
+			int Num2=Integer.parseInt(num2);
+			System.out.println(Num1-Num2);
+			if((Num1-Num2)!=1){
+				System.err.println("提现次数没有减少");
+			}
+		    ClickOnView("bg");
+	
+			Sleep(500);
+			CheckTextById("tv_money", "-0.01");
+			CheckTextById("tv_remark", "提现出账");
+			CheckTextById("tv_balance", "余额 ￥"+After_BanlanceString);
+			
+			ClickOnView("ll_income");
+			WaitForLoadingBearDisappear();
+			
+			CheckTextById("mid", "订单详情");
+			CheckTextById("tv_money", "-0.01");
+			CheckTextById("tv_value", "提现出账");
+//			ClickOnView("bg");
+//			WaitForStringShowAndClick("提现");
+			
+			Success();
+		}
+		
+		//-------------------------------------我的余额，提现输入框---------------------------------------
+		/**
+		 * @Name test_0602_WoDeYuE_TiXian_BianJiKuang
+		 * @Catalogue 我的余额
+		 * @Subcatalog 提现输入框
+		 * @Grade P0
+		 * @Describe   验证不同输入情况智能变化
+		 * @FunctionPoint 变化正常（. 、1... 、1.111   、  100000  ），逐层返回，最后返回到首页
+	     */
+			@Test
+			public void test_0602_WoDeYuE_TiXian_BianJiKuang(){
+				Goto_UserCenter1("我的余额");
+				String Before_BanlanceString =GetStringByid("tv_balance");  //存储当前可提现余额
+				ClickOnText("提现");   //et_balance
+				
+				String StrInFact = driver.findElementById("et_balance").getText();
+				if(!StrInFact.startsWith("可提现余额")){
+					System.err.println("没有显示默认可提现余额");
+				}
+				Input_TiXianJinE_BianJi(".","0.");
+				Input_TiXianJinE_BianJi("1...","1.");
+				Input_TiXianJinE_BianJi("1.111","1.11");
+				ClickOnView("et_balance");
+				driver.getKeyboard().sendKeys("100000");
+				String StrInFactNow = driver.findElementById("et_balance").getText();
+				if(!StrInFact.startsWith(Before_BanlanceString)){
+					System.err.println("对于超额提现没有做默认输入当前可用最大金额的处理");
+				}
+				deleteEditText();
+				String StrInFact2 = driver.findElementById("et_balance").getText();
+				if(!StrInFact2.startsWith("可提现余额")){
+					System.err.println("输入数字全部删除后没有显示默认可提现余额");
+				}
+				GoBack_Physical();
+				WaitForStringShow("提现");
+				GoBack_Physical();
+				WaitForViewShow("iv_slip_toggle");
+				Success();
+			}
+	
+	//-------------------------------------侧栏收起---------------------------------------
+	/**
+	 * @Name test_1100_CeLanShouQi
+	 * @Catalogue 侧栏收起
+	 * @Subcatalog 侧栏收起
+	 * @Grade P0
+	 * @Describe   验证点击收起图标后侧栏正常收起
+	 * @FunctionPoint 正常收起，返回到首页
+     */
+    @Test	
+	public void test_1100_CeLanShouQi(){	
+    	Goto_UserCenter0();
+    	WaitForViewShowAndClick("offDrawer");
+    	WaitForViewShow("iv_slip_toggle");
+    	Success();
+    }
+    
+    
+  //-------------------------------------手动定位---------------------------------------
+    /**
+	 * @Name test_1000_ShouDongDingWei
+	 * @Catalogue 手动定位
+	 * @Subcatalog 手动定位
+	 * @Grade P0
+	 * @Describe   验证定位按钮，文案，叉是否正常出现
+	 * @FunctionPoint 正常出现，返回到首页
+     */
+    @Test	
+	public void test_1000_ShouDongDingWei(){	
+    	Goto_UserCenter0();
+    	WaitForStringShowAndClick("定位");
+    	WaitForViewShow("tv_loading_info");
+    	WaitForViewShowAndClick("tv_locate");
+    	WaitForViewShowAndClick("iv_close");
+    	WaitForViewShow("iv_slip_toggle");
+    	Success();
+    }
+    
+  //-------------------------------------常见问题---------------------------------------
+    /**
+	 * @Name test_0700_ChangJianWenTi
+	 * @Catalogue 常见问题
+	 * @Subcatalog 常见问题列表&详情页
+	 * @Grade P0
+	 * @Describe   验证几条列表标题是否与其详情页标题对应
+	 * @FunctionPoint 全部对应，返回到首页
+     */
+    @Test	
+	public void test_0700_ChangJianWenTi(){	
+    	Goto_UserCenter1("常见问题");
+    	AssertThat_TextById("mid", "常见问题解答");
+    	WaitForStringShowInWebView("常见问题解答");
+//    	
+		ArrayList< WebElement> listElements = (ArrayList<WebElement>) driver.findElementsByXPath("//android.widget.ListView/android.view.View");
+//    	System.err.println(listElements.size());
+		String Strlist = driver.findElement(By.xpath(XpathCommon.ChangJianWenTi_LieBiao+"/android.view.View")).getAttribute("name");
+		int length =listElements.size()<5?listElements.size():5;
+    	for(int i=1;i<=length;i++){
+			String StrInFact = driver.findElement(By.xpath(XpathCommon.ChangJianWenTi_LieBiao+"/android.view.View["+i+"]/android.view.View")).getAttribute("name");
+	    	ClickOnViewXpath(XpathCommon.ChangJianWenTi_LieBiao+"/android.view.View["+i+"]/android.view.View");
+//	    	System.out.println(StrInFact);
+	    	AssertThat_TextByXpathinWebView(XpathCommon.ChangJianWenTi_XiangQing, StrInFact);
+	    	ClickOnView("bg");
+	    	WaitForStringShow(Strlist);
+    	}
+	   	
+	   
+    	ClickOnView("bg");
+    	WaitForViewShow("iv_slip_toggle");
+    	Success();
+    }
+    
+    
+    
+  //-------------------------------------在岗详情---------------------------------------
+    /**
+	 * @Name test_0200_ZaiGangXiangQing
+	 * @Catalogue 在岗详情
+	 * @Subcatalog 在岗详情
+	 * @Grade P0
+	 * @Describe 验证在岗详情页面跳转
+	 * @FunctionPoint 页面跳转正常，返回后回到首页
+	 */
+    @Test	
+	public void test_0200_ZaiGangXiangQing(){	
+    	
+    	Goto_UserCenter1("在岗详情");
+    	AssertThat_TextById("mid", "在岗详情");
+    	WaitForStringShowInWebView("在岗详情");
+    	GoBack_Physical();
+    	WaitForViewShow("iv_slip_toggle");
+    	Success();
+    }
+  //-------------------------------------拉新有奖---------------------------------------
+    /**
+	 * @Name test_0900_LaXinYouJiang
+	 * @Catalogue 拉新有奖
+	 * @Subcatalog 拉新有奖
+	 * @Grade P0
+	 * @Describe   验证拉新有奖入口正确性
+	 * @FunctionPoint 入口正确，返回到首页
+     */
+    @Test	
+	public void test_0900_LaXinYouJiang(){	
+    	Goto_UserCenter1("拉新有奖");
+    	AssertThat_TextById("mid", "拉新有奖");
+    	WaitForStringShowInWebView("拉新有奖");
+    	GoBack_Physical();
+    	WaitForViewShow("iv_slip_toggle");
+    	Success();
+    }
+    
+  //-------------------------------------百度物流大学---------------------------------------
+    /**
+	 * @Name test_0800_WuLiuDaXue
+	 * @Catalogue 百度物流大学
+	 * @Subcatalog 百度物流大学&学习记录
+	 * @Grade P0
+	 * @Describe   验证入口正确性，学习记录入口正确性
+	 * @FunctionPoint 百度物流大学入口正确，学习记录入口正确
+     */
+    @Test	
+	public void test_0800_WuLiuDaXue(){	
+    	Goto_UserCenter1("百度物流大学");
+    	Sleep(2000);   //因为可能是  培训&考试
+    	AssertThat_TextById("mid", "百度物流大学");
+    	WaitForStringShowInWebView("培训&考试");
+    	WaitForViewShowAndClick("right");
+    	WaitForStringShow("学习记录");
+    	AssertThat_TextById("mid", "学习记录");
+    	GoBack_Physical();
+    	AssertThat_TextById("mid", "百度物流大学");
+    	GoBack_Physical();
+    	WaitForViewShow("iv_slip_toggle");
+    	Success();
+    }
+    
+    
+//	//-------------------------------------已改派订单点击关闭&订单流程   //性能自动化---------------------------------------
+//			@Test
+//			public void test_0701_Demo_DingDanLiuCheng(){
+//				WaitForLoadingBearDisappear();
+//				WaitForViewShowAndClick("tv_action_tips");
+//				WaitForViewShowAndClick("tv_action_tips");
+//				WaitForViewShowAndClick("btn_arrive_shop");
+//				AssertThat_DialogIsShow(1);
+//				WaitForViewShowAndClick("ll_order_info");
+//				WaitForViewShowAndClick("tv_order_status");
+//				AssertThat_DialogIsShow(1);
+//				WaitForViewShowAndClick("ll_order_info");
+//				WaitForViewShowAndClick("btn_dish_finish");
+//				AssertThat_DialogIsShow(1);
+//				
+//				Success();
+//				
+//			}
+}
